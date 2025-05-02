@@ -19,7 +19,7 @@ def load_inventory():
     slots = [f"{r}{c+1}" for r in "ABCDEF" for c in range(5)]
     return {slot: dict(item, slot=slot) for slot, item in zip(slots, data)}
 
-# display_inventory(inv, currency)
+display_inventory(inv, currency)
 Displays all in-stock items with prices in the current currency.
 
 def display_inventory(inv, currency):
@@ -27,7 +27,6 @@ def display_inventory(inv, currency):
         if item["quantity"] > 0:
             price = round(item["price_usd"] * currency["rate"], 2)
             print(f"{slot} {currency['symbol']}{price} {item['item']}")
-
 purchase_item(inv, slot, transactions)
 Handles vending: reduces stock, logs transaction, and returns item price.
 
@@ -38,7 +37,6 @@ def purchase_item(inv, slot, transactions):
         transactions.append({"SLOT_ID": slot, "ITEM": item["item"], "AMOUNT_USD": item["price_usd"]})
         return item["price_usd"]
     return 0.0
-
 save_inventory(inv)
 Writes the updated inventory to a file (for next run).
 
@@ -46,7 +44,6 @@ def save_inventory(inv):
     data = {"inventory": [v for v in inv.values()]}
     with open("ending_inventory.json", "w") as f:
         json.dump(data, f, indent=2)
-
 save_transactions(transactions)
 Saves the log of purchases to a CSV file.
 
@@ -57,7 +54,6 @@ def save_transactions(transactions):
         writer = csv.DictWriter(f, fieldnames=["SLOT_ID", "AMOUNT_USD", "ITEM"])
         writer.writeheader()
         writer.writerows(transactions)
-
 generate_chart(inv)
 Creates a bar chart showing stock quantities.
 
@@ -72,14 +68,13 @@ def generate_chart(inv):
     plt.tight_layout()
     plt.savefig("inventory_chart.png")
     plt.close()
-
 How to Run
 Install Required Libraries
+
 pip install matplotlib
-
 Run the Script
-python3 vending.py
 
+python3 vending.py
 Unit Tests
 test_price_conversion()
 Tests correct price conversion from USD to other currencies.
@@ -88,7 +83,6 @@ test_purchase_decrements_inventory()
 Checks if quantity updates correctly after a purchase.
 
 python3 -m unittest vending.py
-
 What Went Wrong
 FileNotFoundError due to missing or misnamed JSON
 
@@ -113,15 +107,17 @@ Connect to a real exchange rate API (live conversion)
 Use a class-based OOP design for VendingMachine
 
 Files
+
 vending.py                # Main code
 tu_vending_inventory.json # Initial inventory
 ending_inventory.json     # Saved inventory after quit
 transactions.csv          # Log of purchases
 inventory_chart.png       # Optional chart image
 
-Notes
-Fully meets all project requirements
+## Notes
 
-Optional features complete: currency swap ✅, bar chart ✅
-
-Tested, clean, and modular — ready for submission
+- Be careful with the JSON file format — one typo can stop it from loading  
+- Slot input should be uppercase or it won’t match (use `.upper()`)  
+- Chart needs matplotlib installed to work  
+- Out-of-stock items still show in the display  
+- Currency feature uses preset rates, not live ones  
