@@ -1,6 +1,4 @@
-# Project3SHER
-
-## Project 3 — TU Vending Machine  
+# Project 3 — TU Vending Machine  
 This Python project simulates a TU vending machine after a ransomware wipe. It reads JSON inventory, lets users purchase snacks, saves a transaction log, and supports extra features like currency switching and inventory charting.
 
 ---
